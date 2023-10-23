@@ -114,11 +114,11 @@ function convertInfoJsonToConfigJson(info) {
     const config_right = overrideRightConfig(info, config_left);
 
     if (config_left.config.matrix.diode_direction == 0) {
-        config_left.config.matrix.rows += config_right.config.matrix.device_rows;
+        config_left.config.matrix.rows = config_left.config.matrix.device_rows + config_right.config.matrix.device_rows;
         config_right.config.matrix.rows = config_left.config.matrix.rows;
     }
     else if (config_left.config.matrix.diode_direction == 1) {
-        config_left.config.matrix.cols += config_right.config.matrix.device_cols;
+        config_left.config.matrix.cols = config_left.matrix.device_cols + config_right.config.matrix.device_cols;
         config_right.config.matrix.cols = config_left.config.matrix.cols;
     }
 

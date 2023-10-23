@@ -11,7 +11,7 @@ export function convertToVialJson(info)
         }, layouts: { labels: [], keymap: [] }
     };
     let layout_index = 0;
-    vial_config.layouts.labels = ["Layout"].concat(Object.keys(info.layouts));
+    vial_config.layouts.labels = [["Layout"].concat(Object.keys(info.layouts))];
     vial_config.layouts.keymap = Object.values(info.layouts).map(
         (layout) => {
             const vial_layout = layout.layout.sort(k => k.y).reduce((vial_matrix, key) => {

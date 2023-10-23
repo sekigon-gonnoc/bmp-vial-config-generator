@@ -1,7 +1,10 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import convertInfoJsonToConfigJson from "./convertToConfigJson";
 import { convertToVialJson } from './convertToVialJson';
+import init, { greet, xz_compress } from './pkg'
 import './App.css'
+import { convertToBmpVialBin } from './convertToBmpVialBin';
+
 
 const keyboardListAPI = `https://api.qmk.fm/v1/keyboards`;
 const keyboardAPI = `https://keyboards.qmk.fm/v1/keyboards`;
@@ -14,6 +17,11 @@ function App() {
   const [infoJson, setInfoJson] = useState("");
   const [configJson, setConfigJson] = useState("");
   const [vialJson, setVialJson] = useState("");
+
+  useEffect(() => {
+    console.log('load wasm');
+    init();
+  }, []);
 
   useEffect(() => {
     if (keyboardList.length == 0)
@@ -92,6 +100,22 @@ function App() {
     setVialJson(event.target.value);
   };
 
+  const handleDownloadClick = () => {
+    // console.log(vialJson);
+    const vialData = xz_compress(vialJson.slice());
+    console.log(vialData);
+    const bmpVialBin = convertToBmpVialBin(vialData, JSON.parse(configJson).config);
+    console.log(bmpVialBin);
+
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(new Blob([bmpVialBin.$arrayBuffer]));
+    link.setAttribute('href', url);
+    link.setAttribute('download', "test.bin");
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <>
       <input
@@ -127,6 +151,7 @@ function App() {
         value={vialJson}
         onChange={handleVialTextAreaChange}
       ></textarea>
+      <button onClick={handleDownloadClick}>Download</button>
     </>
   )
 }
