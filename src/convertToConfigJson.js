@@ -65,7 +65,9 @@ function convertInfoJsonToConfigJson(info) {
     const encoder = info.encoder?.rotary?.reduce((acc, enc) => {
         acc.pin_a.push(PIN_TABLE[enc.pin_a]);
         acc.pin_b.push(PIN_TABLE[enc.pin_b]);
-        acc.resolution.push(enc.resolution);
+        if (enc.resolution) {
+            acc.resolution.push(enc.resolution);
+        }
         return acc;
     }, { pin_a: [], pin_b: [], resolution: [] });
 
