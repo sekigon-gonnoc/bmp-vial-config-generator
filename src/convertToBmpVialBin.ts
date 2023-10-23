@@ -1,3 +1,4 @@
+import { crc16 } from "crc";
 import * as struct from "node-c-struct";
 
 export interface BmpConfigProperty {
@@ -127,10 +128,11 @@ export class CBmpVialBin extends struct.struct<BmpVialBinProperty> {
     return [
       ["magic", struct.uint32_t],
       ["vial_config_length", struct.uint32_t],
-      ["vial_config", struct.uint8_t.times(4096 - 272)],
+      ["vial_config", struct.uint8_t.times(4096 - 276)],
       ["vial_uid", struct.uint8_t.times(8)],
       ["bmp_config", CBmpConfigBin],
       ["reserved", struct.uint8_t.times(64)],
+      ["crc", struct.uint32_t],
     ];
   }
 }
@@ -144,6 +146,7 @@ export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: BmpConf
       vial_uid: [0x05, 0xe4, 0xa1, 0x7f, 0xdc, 0x87, 0xcb, 0x2a],
       bmp_config: {
         ...bmp_config,
+        version: 3,
         device_info: {
           vid: parseInt(bmp_config.device_info.vid, 16),
           pid: parseInt(bmp_config.device_info.pid, 16),
@@ -160,10 +163,9 @@ export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: BmpConf
       vial_reserved: [],
     });
 
-    // Object.assign(cBin.bmp_config.$arrayBuffer, bmp_config);
-    // cBin.bmp_config.$value = bmp_config;
-
     console.log(CBmpVialBin.alignedSize);
+    const crc = crc16(cBin.$arrayBuffer.slice(0, 4096 - 4));
+    cBin.crc.$value = crc;
 
     return cBin;
 }
