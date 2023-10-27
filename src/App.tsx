@@ -45,9 +45,10 @@ function App() {
   useEffect(() => {
     if (selectedKb) {
       console.log('fetch keyboard info.json');
-      fetch(`${keyboardAPI}/${selectedKb}/info.json`)
+      const kbName = selectedKb;
+      fetch(`${keyboardAPI}/${kbName}/info.json`)
         .then((res) => res.json())
-        .then((kb) => setInfoJson(JSON.stringify(kb.keyboards[selectedKb])));
+        .then((kb) => setInfoJson(JSON.stringify(kb.keyboards[kbName])));
     } else {
       setInfoJson('');
     }
