@@ -127,6 +127,16 @@ function App() {
     setVialJson(event.target.value);
   };
 
+  const downloadData = (data: any, name: string) => {
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(new Blob([data]));
+    link.setAttribute("href", url);
+    link.setAttribute("download", name);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
   const handleDownloadClick = () => {
     // console.log(vialJson);
     const vialData = xz_compress(vialJson.slice());
@@ -137,13 +147,21 @@ function App() {
     );
     console.log(bmpVialBin);
 
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(new Blob([bmpVialBin.$arrayBuffer]));
-    link.setAttribute("href", url);
-    link.setAttribute("download", "test.bin");
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
+    downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}.bin`);
+  };
+
+  const handleDownloadVialJsonClick = () => {
+    downloadData(
+      JSON.stringify(JSON.parse(vialJson), null, '\t'),
+      `${selectedKb}_vial.json`
+    );
+  };
+
+  const handleDownloadConfigJsonClick = () => {
+    downloadData(
+      JSON.stringify(JSON.parse(configJson), null, '\t'),
+      `${selectedKb}_${configType}_config.json`
+    );
   };
 
   return (
@@ -167,8 +185,17 @@ function App() {
         cols={40}
         value={infoJson}
         onChange={handleInfoTextAreaChange}
+        placeholder="info.json"
       ></textarea>
       <button onClick={handleGenerateClick}>Generate</button>
+      <textarea
+        rows={10}
+        cols={40}
+        value={vialJson}
+        onChange={handleVialTextAreaChange}
+        placeholder="vial.json"
+      ></textarea>
+      <button onClick={handleDownloadVialJsonClick}>Download vial.json</button>
       <select value={configType} onChange={handleSelectConfigChange}>
         <option value="">選択してください</option>
         {Object.keys(configTypeList).map((item) => (
@@ -182,14 +209,10 @@ function App() {
         cols={40}
         value={configJson}
         onChange={handleConfigTextAreaChange}
+        placeholder="config.json"
       ></textarea>
-      <textarea
-        rows={10}
-        cols={40}
-        value={vialJson}
-        onChange={handleVialTextAreaChange}
-      ></textarea>
-      <button onClick={handleDownloadClick}>Download</button>
+      <button onClick={handleDownloadConfigJsonClick}>Download config.json</button>
+      <button onClick={handleDownloadClick}>Download BIN</button>
     </>
   );
 }
