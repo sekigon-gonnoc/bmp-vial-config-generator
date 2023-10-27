@@ -109,7 +109,7 @@ function convertInfoJsonToConfigJson(info) {
     const baseConfig = config_left;
 
     if (!info.split?.enabled) {
-        return { 'default': baseConfig };
+        return { default: baseConfig };
     }
 
     config_left.config.mode = "SPLIT_MASTER";
@@ -132,17 +132,17 @@ function convertInfoJsonToConfigJson(info) {
         return { 'master': masterConfig, 'slave': slaveConfig };
     }
 
-    config_left = JSON.parse(JSON.stringify(baseConfig));
-    config_left.config.matrix.row_pins = [...config_left.config.matrix.row_pins, ...config_right.config.matrix.row_pins];
-    config_left.config.matrix.col_pins = [...config_left.config.matrix.col_pins, ...config_right.config.matrix.col_pins];
-    config_left.config.matrix.diode_direction += 2;
-    const lpmeConfig = config_left;
+    const lpmeConfig = JSON.parse(JSON.stringify(config_left));
+    lpmeConfig.config.matrix.diode_direction += 2;
+    lpmeConfig.config.matrix.row_pins = [...config_left.config.matrix.row_pins, ...config_right.config.matrix.row_pins];
+    lpmeConfig.config.matrix.col_pins = [...config_left.config.matrix.col_pins, ...config_right.config.matrix.col_pins];
+    lpmeConfig.config.mode = "SINGLE";
 
-    console.log(masterConfig);
-    console.log(slaveConfig);
-    console.log(lpmeConfig);
+    // console.log(masterConfig);
+    // console.log(slaveConfig);
+    // console.log(lpmeConfig);
 
-    return { 'master': masterConfig, 'slave': slaveConfig, 'lpme': lpmeConfig };
+    return { master: masterConfig, slave: slaveConfig, lpme: lpmeConfig };
 }
 
 export default convertInfoJsonToConfigJson
