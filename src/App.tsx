@@ -138,23 +138,46 @@ function App() {
   };
 
   const handleDownloadClick = () => {
-    // console.log(vialJson);
+    try {
+      JSON.parse(vialJson);
+    } catch (error) {
+      alert("Invalid vial JSON");
+      return;
+    }
+
+    try {
+      JSON.parse(configJson);
+    } catch (error) {
+      alert("Invalid config JSON");
+      return;
+    }
+
     const vialData = xz_compress(vialJson.slice());
-    console.log(vialData);
     const bmpVialBin = convertToBmpVialBin(
       vialData,
       JSON.parse(configJson).config
     );
-    console.log(bmpVialBin);
 
-    downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}.bin`);
+    downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}_${configType}.bin`);
   };
 
   const handleDownloadVialJsonClick = () => {
+    try {
+      JSON.parse(vialJson);
+    } catch (error) {
+      alert("Invalid vial JSON");
+      return;
+    }
     downloadData(vialJson, `${selectedKb}_vial.json`);
   };
 
   const handleDownloadConfigJsonClick = () => {
+    try {
+      JSON.parse(configJson);
+    } catch (error) {
+      alert("Invalid config JSON");
+      return;
+    }
     downloadData(configJson, `${selectedKb}_${configType}_config.json`);
   };
 
