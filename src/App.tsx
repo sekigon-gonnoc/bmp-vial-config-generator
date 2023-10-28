@@ -61,7 +61,7 @@ function App() {
   useEffect(() => {
     if (configType !== "") {
       if (configType in configTypeList) {
-        setConfigJson(JSON.stringify(configTypeList[configType]));
+        setConfigJson(JSON.stringify(configTypeList[configType], null, "\t"));
       } else {
         setConfigJson("");
       }
@@ -112,7 +112,7 @@ function App() {
     }
 
     const vial = convertToVialJson(JSON.parse(infoJson));
-    setVialJson(JSON.stringify(vial));
+    setVialJson(JSON.stringify(vial, null, "\t"));
   };
 
   const handleConfigTextAreaChange = (
@@ -135,7 +135,7 @@ function App() {
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-  }
+  };
 
   const handleDownloadClick = () => {
     // console.log(vialJson);
@@ -151,69 +151,73 @@ function App() {
   };
 
   const handleDownloadVialJsonClick = () => {
-    downloadData(
-      JSON.stringify(JSON.parse(vialJson), null, '\t'),
-      `${selectedKb}_vial.json`
-    );
+    downloadData(vialJson, `${selectedKb}_vial.json`);
   };
 
   const handleDownloadConfigJsonClick = () => {
-    downloadData(
-      JSON.stringify(JSON.parse(configJson), null, '\t'),
-      `${selectedKb}_${configType}_config.json`
-    );
+    downloadData(configJson, `${selectedKb}_${configType}_config.json`);
   };
 
   return (
-    <>
-      <input
-        type="text"
-        placeholder="絞り込みテキスト"
-        value={filterText}
-        onChange={handleFilterChange}
-      />
-      <select value={selectedKb} onChange={handleSelectChange}>
-        <option value="">選択してください</option>
-        {keyboardListFiltered.map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
-      <textarea
-        rows={10}
-        cols={40}
-        value={infoJson}
-        onChange={handleInfoTextAreaChange}
-        placeholder="info.json"
-      ></textarea>
-      <button onClick={handleGenerateClick}>Generate</button>
-      <textarea
-        rows={10}
-        cols={40}
-        value={vialJson}
-        onChange={handleVialTextAreaChange}
-        placeholder="vial.json"
-      ></textarea>
-      <button onClick={handleDownloadVialJsonClick}>Download vial.json</button>
-      <select value={configType} onChange={handleSelectConfigChange}>
-        <option value="">選択してください</option>
-        {Object.keys(configTypeList).map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
-      <textarea
-        rows={10}
-        cols={40}
-        value={configJson}
-        onChange={handleConfigTextAreaChange}
-        placeholder="config.json"
-      ></textarea>
-      <button onClick={handleDownloadConfigJsonClick}>Download config.json</button>
-      <button onClick={handleDownloadClick}>Download BIN</button>
-    </>
+    <div className="grid-container">
+      <div className="grid-row">
+        <textarea
+          value={infoJson}
+          onChange={handleInfoTextAreaChange}
+          placeholder="info.json"
+        ></textarea>
+      </div>
+      <div className="grid-row-2">
+        <input
+          type="text"
+          placeholder="絞り込みテキスト"
+          value={filterText}
+          onChange={handleFilterChange}
+        />
+        <select value={selectedKb} onChange={handleSelectChange}>
+          <option value="">選択してください</option>
+          {keyboardListFiltered.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleGenerateClick}>Generate</button>
+      </div>
+      <div className="grid-row">
+        <textarea
+          value={vialJson}
+          onChange={handleVialTextAreaChange}
+          placeholder="vial.json"
+        ></textarea>
+      </div>
+      <div className="grid-row-2">
+        <button onClick={handleDownloadVialJsonClick}>
+          Download vial.json
+        </button>
+      </div>
+      <div className="grid-row">
+        <textarea
+          value={configJson}
+          onChange={handleConfigTextAreaChange}
+          placeholder="config.json"
+        ></textarea>
+      </div>
+      <div className="grid-row-2">
+        <select value={configType} onChange={handleSelectConfigChange}>
+          <option value="">選択してください</option>
+          {Object.keys(configTypeList).map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleDownloadConfigJsonClick}>
+          Download config.json
+        </button>
+        <button onClick={handleDownloadClick}>Download BIN</button>
+      </div>
+    </div>
   );
 }
 

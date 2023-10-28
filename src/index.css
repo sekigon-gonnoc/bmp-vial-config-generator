@@ -25,10 +25,11 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  position: fixed;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
+  height: 100%;
 }
 
 h1 {
@@ -53,6 +54,46 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+textarea {
+  background-color: #1a1a1a;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  resize: none;
+}
+textarea:hover {
+  border-color: #646cff;
+}
+textarea:focus,
+textarea:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+select {
+  background-color: #1a1a1a;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0.6em 1.2em;
+}
+select:hover {
+  border-color: #646cff;
+}
+
+input {
+  background-color: #1a1a1a;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0.6em 1.2em;
+}
+input:hover {
+  border-color: #646cff;
 }
 
 @media (prefers-color-scheme: light) {
