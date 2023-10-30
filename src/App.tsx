@@ -4,6 +4,7 @@ import { convertToVialJson } from "./convertToVialJson";
 import init, { xz_compress } from "./pkg";
 import "./App.css";
 import { convertToBmpVialBin } from "./convertToBmpVialBin";
+import * as bmpKeycodes from './bmpKeycodes.json'
 
 const keyboardListAPI = `https://api.qmk.fm/v1/keyboards`;
 const keyboardAPI = `https://keyboards.qmk.fm/v1/keyboards`;
@@ -161,6 +162,22 @@ function App() {
     downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}_${configType}.bin`);
   };
 
+  const handleAppendBmpCustomKeycodesClick = () => {
+    try {
+      const json = JSON.stringify(
+        {
+          ...JSON.parse(vialJson),
+          ...bmpKeycodes,
+        },
+        null,
+        "\t"
+      );
+      setVialJson(json);
+    } catch (error) {
+      alert("Invalid vial JSON");
+    }
+  };
+
   const handleDownloadVialJsonClick = () => {
     try {
       JSON.parse(vialJson);
@@ -215,6 +232,9 @@ function App() {
         ></textarea>
       </div>
       <div className="grid-row-2">
+        <button onClick={handleAppendBmpCustomKeycodesClick}>
+          Append BMP custom keycodes
+        </button>
         <button onClick={handleDownloadVialJsonClick}>
           Download vial.json
         </button>

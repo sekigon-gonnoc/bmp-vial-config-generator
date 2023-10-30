@@ -1,4 +1,3 @@
-import * as bmpKeycodes from './bmpKeycodes.json'
 
 export function convertToVialJson(info)
 {
@@ -82,8 +81,5 @@ export function convertToVialJson(info)
         }
     }
 
-    return {
-        ...vial_config,
-        ...bmpKeycodes
-    };
+    return vial_config;
 }
