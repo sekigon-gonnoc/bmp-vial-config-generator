@@ -63,7 +63,7 @@ function App() {
 
   useEffect(() => {
     if (configType !== "") {
-      if (configTypeList?.configType) {
+      if (configType in configTypeList) {
         setConfigJson(JSON.stringify(configTypeList[configType], null, "\t"));
       } else {
         setConfigJson("");
