@@ -47,6 +47,7 @@ interface BmpVialBinProperty {
   vial_uid: number[];
   bmp_config: BmpConfigProperty;
   vial_reserved: number[];
+  crc: number;
 }
 
 class DeviceInfo extends struct.struct<object> {
@@ -137,7 +138,7 @@ export class CBmpVialBin extends struct.struct<BmpVialBinProperty> {
   }
 }
 
-export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: BmpConfigProperty)
+export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: any)
 {
     const cBin = new CBmpVialBin({
       magic: 0xb05afaae,
@@ -150,8 +151,12 @@ export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: BmpConf
         device_info: {
           vid: parseInt(bmp_config.device_info.vid, 16),
           pid: parseInt(bmp_config.device_info.pid, 16),
-          name: bmp_config.device_info.name.split('').map(c=>c.charCodeAt(0)),
-          manufacture: bmp_config.device_info.manufacture.split('').map(c=>c.charCodeAt(0)),
+          name: (bmp_config.device_info.name as string)
+            .split("")
+            .map((c) => c.charCodeAt(0)),
+          manufacture: (bmp_config.device_info.manufacture as string)
+            .split("")
+            .map((c) => c.charCodeAt(0)),
         },
         mode:
           bmp_config.mode === "SPLIT_MASTER"
@@ -161,11 +166,12 @@ export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: BmpConf
             : 0,
       },
       vial_reserved: [],
+      crc: 0,
     });
 
     console.log(CBmpVialBin.alignedSize);
     const crc = crc16(cBin.$arrayBuffer.slice(0, 4096 - 4));
-    cBin.crc.$value = crc;
+    (cBin as any).crc.$value = crc;
 
     return cBin;
 }

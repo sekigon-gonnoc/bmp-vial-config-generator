@@ -20,7 +20,9 @@ function App() {
   const [configJson, setConfigJson] = useState("");
   const [vialJson, setVialJson] = useState("");
   const [configType, setConfigType] = useState("");
-  const [configTypeList, setConfigTypeList] = useState({});
+  const [configTypeList, setConfigTypeList] = useState<{ [key: string]: any }>(
+    {}
+  );
 
   useEffect(() => {
     console.log("load wasm");
@@ -61,7 +63,7 @@ function App() {
 
   useEffect(() => {
     if (configType !== "") {
-      if (configType in configTypeList) {
+      if (configTypeList?.configType) {
         setConfigJson(JSON.stringify(configTypeList[configType], null, "\t"));
       } else {
         setConfigJson("");
