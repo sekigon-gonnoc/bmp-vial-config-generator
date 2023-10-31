@@ -12,6 +12,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "crc": "^4.3.2",
+    "hjson": "^3.2.2",
     "node-c-struct": "git+https://github.com/sekigon-gonnoc/node-cstruct",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

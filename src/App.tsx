@@ -5,6 +5,7 @@ import init, { xz_compress } from "./pkg";
 import "./App.css";
 import { convertToBmpVialBin } from "./convertToBmpVialBin";
 import * as bmpKeycodes from './bmpKeycodes.json'
+import * as Hjson from "hjson"
 
 const keyboardListAPI = `https://api.qmk.fm/v1/keyboards`;
 const keyboardAPI = `https://keyboards.qmk.fm/v1/keyboards`;
@@ -102,7 +103,7 @@ function App() {
 
   const handleGenerateClick = () => {
     try {
-      const config = convertInfoJsonToConfigJson(JSON.parse(infoJson));
+      const config = convertInfoJsonToConfigJson(Hjson.parse(infoJson));
       setConfigTypeList(config);
       if (config.default) {
         setConfigType("default");
@@ -114,7 +115,7 @@ function App() {
       setConfigTypeList({});
     }
 
-    const vial = convertToVialJson(JSON.parse(infoJson));
+    const vial = convertToVialJson(Hjson.parse(infoJson));
     setVialJson(JSON.stringify(vial, null, "\t"));
   };
 
@@ -142,23 +143,23 @@ function App() {
 
   const handleDownloadClick = () => {
     try {
-      JSON.parse(vialJson);
+      Hjson.parse(vialJson);
     } catch (error) {
-      alert("Invalid vial JSON");
+      alert("Invalid vial Hjson");
       return;
     }
 
     try {
-      JSON.parse(configJson);
+      Hjson.parse(configJson);
     } catch (error) {
-      alert("Invalid config JSON");
+      alert("Invalid config Hjson");
       return;
     }
 
     const vialData = xz_compress(vialJson.slice());
     const bmpVialBin = convertToBmpVialBin(
       vialData,
-      JSON.parse(configJson).config
+      Hjson.parse(configJson).config
     );
 
     downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}_${configType}.bin`);
@@ -168,7 +169,7 @@ function App() {
     try {
       const json = JSON.stringify(
         {
-          ...JSON.parse(vialJson),
+          ...Hjson.parse(vialJson),
           ...bmpKeycodes,
         },
         null,
@@ -176,15 +177,15 @@ function App() {
       );
       setVialJson(json);
     } catch (error) {
-      alert("Invalid vial JSON");
+      alert("Invalid vial Hjson");
     }
   };
 
   const handleDownloadVialJsonClick = () => {
     try {
-      JSON.parse(vialJson);
+      Hjson.parse(vialJson);
     } catch (error) {
-      alert("Invalid vial JSON");
+      alert("Invalid vial Hjson");
       return;
     }
     downloadData(vialJson, `${selectedKb}_vial.json`);
@@ -192,9 +193,9 @@ function App() {
 
   const handleDownloadConfigJsonClick = () => {
     try {
-      JSON.parse(configJson);
+      Hjson.parse(configJson);
     } catch (error) {
-      alert("Invalid config JSON");
+      alert("Invalid config Hjson");
       return;
     }
     downloadData(configJson, `${selectedKb}_${configType}_config.json`);
