@@ -114,7 +114,7 @@ function convertInfoJsonToConfigJson(info) {
     const baseConfig = config_left;
 
     if (!info.split?.enabled) {
-        return { default: baseConfig };
+        return { single: baseConfig };
     }
 
     config_left.config.mode = "SPLIT_MASTER";

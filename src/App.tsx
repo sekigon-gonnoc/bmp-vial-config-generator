@@ -37,18 +37,21 @@ function App() {
         .then((res) => res.json())
         .then((kb) => {
           setKeyboardList(kb);
-          const filteredList = kb.filter((kb: string) =>
-            kb.includes(filterText)
-          );
-          setKeyboardListFiltered(filteredList);
 
-          if (filteredList.length > 0 && filteredList[0] != selectedKb) {
-            setSelectedKb(filteredList[0]);
+          if (filterText !== "") {
+            const filteredList = kb.filter((kb: string) =>
+              kb.includes(filterText)
+            );
+            setKeyboardListFiltered(filteredList);
+
+            if (filteredList.length > 0 && filteredList[0] != selectedKb) {
+              setSelectedKb(filteredList[0]);
+            }
           }
         })
         .catch(() => setKeyboardList(["null"]));
     }
-  }, [keyboardList, filterText]);
+  }, [keyboardList, filterText, selectedKb]);
 
   useEffect(() => {
     if (selectedKb) {
@@ -105,8 +108,8 @@ function App() {
     try {
       const config = convertInfoJsonToConfigJson(Hjson.parse(infoJson));
       setConfigTypeList(config);
-      if (config.default) {
-        setConfigType("default");
+      if (config.single) {
+        setConfigType("single");
       } else if (config.master) {
         setConfigType("master");
       }
