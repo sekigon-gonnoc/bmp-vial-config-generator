@@ -58,6 +58,11 @@ function convertInfoJsonToConfigJson(info) {
         throw Error("This keyboard may not use Pro Micro");
     }
 
+    const matrix_rows = Object.values(info.layouts).map(l => Object.values(l.layout)).flat().reduce(
+        (a, b) => Math.max(a, b.matrix[0]), 0) + 1;
+    const matrix_cols = Object.values(info.layouts).map(l => Object.values(l.layout)).flat().reduce(
+        (a, b) => Math.max(a, b.matrix[1]), 0) + 1;
+
     const diodeDir = getDiodeDir(info.diode_direction);
 
     const ledPin = (info.ws2812?.pin) ? PIN_TABLE[info.ws2812.pin] : 255;
@@ -80,8 +85,8 @@ function convertInfoJsonToConfigJson(info) {
                 manufacture: info.manufacturer ?? ""
             },
             matrix: {
-                rows: info.matrix_size.rows,
-                cols: info.matrix_size.cols,
+                rows: matrix_rows,
+                cols: matrix_cols,
                 layer: 8,
                 device_rows: row.length,
                 device_cols: col.length,
@@ -101,7 +106,7 @@ function convertInfoJsonToConfigJson(info) {
         }
     };
 
-    if (!info.matrix_pins.direct && !info.split?.enabled && (config_left.config.matrix.device_rows< info.matrix_size.rows || config_left.config.matrix.device_cols < info.matrix_size.cols)) {
+    if (!info.matrix_pins.direct && !info.split?.enabled && (config_left.config.matrix.device_rows< matrix_rows || config_left.config.matrix.device_cols < matrix_cols)) {
         // may be row2col2row or col2row2col
         config_left.config.matrix.diode_direction += 4;
     }
