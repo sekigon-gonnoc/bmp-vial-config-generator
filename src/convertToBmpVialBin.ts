@@ -164,6 +164,7 @@ export function convertToBmpVialBin(vial_config: Uint8Array, bmp_config: any)
             : bmp_config.mode === "SPLIT_SLAVE"
             ? 2
             : 0,
+        encoder: bmp_config.encoder ?? { pin_a: [], pin_b: [], resolution: [] },
       },
       vial_reserved: [],
       crc: 0,
