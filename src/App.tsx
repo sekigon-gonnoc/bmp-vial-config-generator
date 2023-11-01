@@ -68,7 +68,7 @@ function App() {
   useEffect(() => {
     if (configType !== "") {
       if (configType in configTypeList) {
-        setConfigJson(JSON.stringify(configTypeList[configType], null, "\t"));
+        setConfigJson(JSON.stringify(configTypeList[configType], null, 4));
       } else {
         setConfigJson("");
       }
@@ -119,7 +119,7 @@ function App() {
     }
 
     const vial = convertToVialJson(Hjson.parse(infoJson));
-    setVialJson(JSON.stringify(vial, null, "\t"));
+    setVialJson(JSON.stringify(vial, null, 4));
   };
 
   const handleConfigTextAreaChange = (
@@ -176,7 +176,7 @@ function App() {
           ...bmpKeycodes,
         },
         null,
-        "\t"
+        4
       );
       setVialJson(json);
     } catch (error) {

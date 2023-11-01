@@ -3,6 +3,8 @@ export function convertToVialJson(info)
 {
     const vial_config = {
         name: info.keyboard_name,
+        vendorId: info.usb.vid,
+        productId: info.usb.pid,
         matrix: {
             rows: Object.values(info.layouts).map(l => Object.values(l.layout)).flat().reduce(
                 (a, b) => Math.max(a, b.matrix[0]), 0) + 1,

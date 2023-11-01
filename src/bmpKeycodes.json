@@ -104,6 +104,11 @@
             "name": "BATT",
             "title": "Print battery info",
             "shortName": "BATT_LV"
+        },
+        {
+            "name": "ENT_SLP",
+            "title": "Enter deep sleep mode",
+            "shortName": "ENT_SLP"
         }
     ]
 }
