@@ -48,7 +48,10 @@ async function generate_config_files(name, keyboard_path) {
     const dest_path = info.keyboard_folder.replaceAll('/', '_');
   try {
     const config = convertInfoJsonToConfigJson(info);
-    const vialJson = { ...convertToVialJson(info), ...bmpKeycodes };
+    const vialJson = {
+      ...convertToVialJson(info),
+      customKeycodes: bmpKeycodes.customKeycodes,
+    };
 
     for (const e of Object.entries(config)) {
       console.log(e[0]);
