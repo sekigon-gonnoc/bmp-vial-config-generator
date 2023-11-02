@@ -173,7 +173,7 @@ function App() {
       const json = JSON.stringify(
         {
           ...Hjson.parse(vialJson),
-          ...bmpKeycodes,
+          customKeycodes: bmpKeycodes.customKeycodes,
         },
         null,
         4

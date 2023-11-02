@@ -83,5 +83,9 @@ export function convertToVialJson(info)
         }
     }
 
+    if (info.rgblight) {
+        vial_config.lighting = "qmk_rgblight";
+    }
+
     return vial_config;
 }
