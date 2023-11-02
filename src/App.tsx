@@ -165,7 +165,18 @@ function App() {
       Hjson.parse(configJson).config
     );
 
-    downloadData(bmpVialBin.$arrayBuffer, `${selectedKb}_${configType}.bin`);
+      try {
+        const info = Hjson.parse(infoJson);
+        const fileBaseName = info.keyboard_folder
+          ? info.keyboard_folder.replaceAll("/", "_")
+          : info.manufacturer + "_" + info.keyboard_name;
+        downloadData(
+          bmpVialBin.$arrayBuffer,
+          `${fileBaseName}_${configType}.bin`
+        );
+      } catch (error) {
+        alert(error);
+      }
   };
 
   const handleAppendBmpCustomKeycodesClick = () => {
@@ -187,21 +198,29 @@ function App() {
   const handleDownloadVialJsonClick = () => {
     try {
       Hjson.parse(vialJson);
+      const info = Hjson.parse(infoJson);
+      const fileBaseName = info.keyboard_folder
+        ? info.keyboard_folder.replaceAll("/", "_")
+        : info.manufacturer + "_" + info.keyboard_name;
+      downloadData(vialJson, `${fileBaseName}_vial.json`);
     } catch (error) {
       alert("Invalid vial Hjson");
       return;
     }
-    downloadData(vialJson, `${selectedKb}_vial.json`);
   };
 
   const handleDownloadConfigJsonClick = () => {
     try {
       Hjson.parse(configJson);
+      const info = Hjson.parse(infoJson);
+      const fileBaseName = info.keyboard_folder
+        ? info.keyboard_folder.replaceAll("/", "_")
+        : info.manufacturer + "_" + info.keyboard_name;
+      downloadData(configJson, `${fileBaseName}_${configType}_config.json`);
     } catch (error) {
       alert("Invalid config Hjson");
       return;
     }
-    downloadData(configJson, `${selectedKb}_${configType}_config.json`);
   };
 
   return (
