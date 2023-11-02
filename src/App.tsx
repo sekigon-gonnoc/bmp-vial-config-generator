@@ -264,7 +264,7 @@ function App() {
         <button onClick={handleDownloadConfigJsonClick}>
           Download config.json
         </button>
-        <button onClick={handleDownloadClick}>Download BIN</button>
+        <button onClick={handleDownloadClick}>Download config.bin</button>
       </div>
     </div>
   );
