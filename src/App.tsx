@@ -172,7 +172,7 @@ function App() {
           : info.manufacturer + "_" + info.keyboard_name;
         downloadData(
           bmpVialBin.$arrayBuffer,
-          `${fileBaseName}_${configType}.bin`
+          `${fileBaseName}_${configType}_config.bin`
         );
       } catch (error) {
         alert(error);
