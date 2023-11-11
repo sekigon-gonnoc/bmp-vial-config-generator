@@ -23,11 +23,15 @@ const keyboard_name = keyboard_list.map((k) => {
 
 const keyboards = await fetch(keyboardListAPI).then((res) => res.json());
 
-it("main", async () => {
-  await main().then();
+it("qmk-api", async () => {
+  await convert_from_qmk_api().then();
 });
 
-async function main() {
+it("json-to-bin", async () => {
+  await convert_all_json().then();
+});
+
+async function convert_from_qmk_api() {
   // init();
 
   for (const k of keyboard_name) {
@@ -63,7 +67,7 @@ async function generate_config_files(name, keyboard_path) {
       fs.writeFileSync(path, Buffer.from(bmpVialBin.$arrayBuffer));
 
       const config_json_path = `generate/${dest_path}_${e[0]}_config.json`;
-      fs.writeFileSync(config_json_path, JSON.stringify(config, null, 4));
+      fs.writeFileSync(config_json_path, JSON.stringify(e[1], null, 4));
     }
 
     const vial_json_path = `generate/${dest_path}_vial.json`;
@@ -72,3 +76,35 @@ async function generate_config_files(name, keyboard_path) {
     console.log(error);
   }
 }
+
+async function convert_all_json() {
+  const files = fs.readdirSync('generate')
+  for (const file of files) {
+    if (!file.includes('config.json')) continue;
+    const dest_path = 'generate/' + file.split('_').slice(0, -2).join('_');
+    const vial_path = dest_path + '_vial.json'
+    const vial = JSON.parse(fs.readFileSync(vial_path));
+    const config = JSON.parse(fs.readFileSync('generate/' + file));
+    const config_type = file.split('_').slice(-2)[0];
+
+    console.log(dest_path, vial, config, config_type);
+    await convert_vial_json_to_bin(dest_path, vial, config, config_type)
+  }
+}
+
+
+async function convert_vial_json_to_bin(dest_path, vial, config, config_type) {
+    const vialJson = {
+      ...vial,
+      customKeycodes: bmpKeycodes.customKeycodes,
+    };
+
+    const vialData = await lzma.compress(JSON.stringify(vialJson), "6");
+    const bmpVialBin = convertToBmpVialBin(vialData, config.config);
+    const path = `${dest_path}_${config_type}_config.bin`;
+    await mkdirp.mkdirp(getDirName(path));
+    fs.writeFileSync(path, Buffer.from(bmpVialBin.$arrayBuffer));
+
+    const vial_json_path = `${dest_path}_vial.json`;
+    fs.writeFileSync(vial_json_path, JSON.stringify(vialJson, null, 4));
+  } 
