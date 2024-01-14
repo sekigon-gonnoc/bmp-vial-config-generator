@@ -38,12 +38,12 @@ function App() {
         .then((kb) => {
           setKeyboardList(kb);
 
-          if (filterText !== "") {
-            const filteredList = kb.filter((kb: string) =>
-              kb.includes(filterText)
-            );
-            setKeyboardListFiltered(filteredList);
+          const filteredList = kb.filter((kb: string) => 
+            kb.includes(filterText)
+          );
+          setKeyboardListFiltered(filteredList);
 
+          if (filterText !== "") {
             if (filteredList.length > 0 && filteredList[0] != selectedKb) {
               setSelectedKb(filteredList[0]);
             }
