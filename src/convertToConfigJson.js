@@ -62,6 +62,8 @@ function convertInfoJsonToConfigJson(info) {
         (a, b) => Math.max(a, b.matrix[0]), 0) + 1;
     const matrix_cols = Object.values(info.layouts).map(l => Object.values(l.layout)).flat().reduce(
         (a, b) => Math.max(a, b.matrix[1]), 0) + 1;
+    row = row.slice(0, matrix_rows);
+    col = col.slice(0, matrix_cols);
 
     const diodeDir = getDiodeDir(info.diode_direction);
 
