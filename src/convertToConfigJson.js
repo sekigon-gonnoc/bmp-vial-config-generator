@@ -106,7 +106,7 @@ function convertInfoJsonToConfigJson(info) {
         }
     };
 
-    if (!info.matrix_pins.direct && !info.split?.enabled && (config_left.config.matrix.device_rows< matrix_rows || config_left.config.matrix.device_cols < matrix_cols)) {
+    if (!info.matrix_pins.direct && !info.split?.enabled && (config_left.config.matrix.device_rows < matrix_rows || config_left.config.matrix.device_cols < matrix_cols)) {
         // may be row2col2row or col2row2col
         config_left.config.matrix.diode_direction += 4;
     }
@@ -150,4 +150,22 @@ function convertInfoJsonToConfigJson(info) {
     return { master: masterConfig, slave: slaveConfig, lpme: lpmeConfig };
 }
 
-export default convertInfoJsonToConfigJson
+function validateConfigJson(config) {
+    if (config.config.matrix.rows > 32) {
+        throw Error("config.matrix.rows > 32");
+    }
+    if (config.config.matrix.cols > 32) {
+        throw Error("config.matrix.cols > 32");
+    }
+    if (config.config.matrix.device_rows > config.config.matrix.rows) {
+        throw Error("config.matrix.device_rows > config.matrix.rows")
+    }
+    if (config.config.matrix.device_cols > config.config.matrix.cols) {
+        throw Error("config.matrix.device_cols > config.matrix.cols")
+    }
+    if (config.config.matrix.layer > 32 || config.config.matrix.layer < 1) {
+        throw Error("invalid config.matrix.layer ")
+    }
+}
+
+export { convertInfoJsonToConfigJson, validateConfigJson }

@@ -1,5 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import convertInfoJsonToConfigJson from "./convertToConfigJson";
+import {
+  convertInfoJsonToConfigJson,
+  validateConfigJson,
+} from "./convertToConfigJson";
 import { convertToVialJson } from "./convertToVialJson";
 import init, { xz_compress } from "./pkg";
 import "./App.css";
@@ -211,14 +214,15 @@ function App() {
 
   const handleDownloadConfigJsonClick = () => {
     try {
-      Hjson.parse(configJson);
+      const config = Hjson.parse(configJson);
+      validateConfigJson(config);
       const info = Hjson.parse(infoJson);
       const fileBaseName = info.keyboard_folder
         ? info.keyboard_folder.replaceAll("/", "_")
         : info.manufacturer + "_" + info.keyboard_name;
       downloadData(configJson, `${fileBaseName}_${configType}_config.json`);
     } catch (error) {
-      alert("Invalid config Hjson");
+      alert(`Invalid config json\n${error}`);
       return;
     }
   };
