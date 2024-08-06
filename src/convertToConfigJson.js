@@ -36,6 +36,8 @@ function overrideRightConfig(info, config_left) {
         }
         config_right.config.matrix.row_pins = row;
         config_right.config.matrix.col_pins = col;
+        config_right.config.matrix.device_rows = row.length;
+        config_right.config.matrix.device_cols = col.length;
     }
 
     return config_right;
@@ -125,12 +127,12 @@ function convertInfoJsonToConfigJson(info) {
     config_left.config.mode = "SPLIT_MASTER";
     const config_right = overrideRightConfig(info, config_left);
 
-    if (config_left.config.matrix.diode_direction == 0) {
+    if (config_left.config.matrix.diode_direction == 0
+        || config_left.config.matrix.diode_direction == 1
+    ) {
         config_left.config.matrix.rows = config_left.config.matrix.device_rows + config_right.config.matrix.device_rows;
         config_right.config.matrix.rows = config_left.config.matrix.rows;
-    }
-    else if (config_left.config.matrix.diode_direction == 1) {
-        config_left.config.matrix.cols = config_left.config.matrix.device_cols + config_right.config.matrix.device_cols;
+        config_left.config.matrix.cols = Math.max(config_left.config.matrix.device_cols, config_right.config.matrix.device_cols);
         config_right.config.matrix.cols = config_left.config.matrix.cols;
     }
 
