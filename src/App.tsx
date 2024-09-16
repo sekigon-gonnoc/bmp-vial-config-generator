@@ -1,5 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import convertInfoJsonToConfigJson from "./convertToConfigJson";
+import {
+  convertInfoJsonToConfigJson,
+  validateConfigJson,
+} from "./convertToConfigJson";
 import { convertToVialJson } from "./convertToVialJson";
 import init, { xz_compress } from "./pkg";
 import "./App.css";
@@ -38,12 +41,12 @@ function App() {
         .then((kb) => {
           setKeyboardList(kb);
 
-          if (filterText !== "") {
-            const filteredList = kb.filter((kb: string) =>
-              kb.includes(filterText)
-            );
-            setKeyboardListFiltered(filteredList);
+          const filteredList = kb.filter((kb: string) => 
+            kb.includes(filterText)
+          );
+          setKeyboardListFiltered(filteredList);
 
+          if (filterText !== "") {
             if (filteredList.length > 0 && filteredList[0] != selectedKb) {
               setSelectedKb(filteredList[0]);
             }
@@ -211,14 +214,15 @@ function App() {
 
   const handleDownloadConfigJsonClick = () => {
     try {
-      Hjson.parse(configJson);
+      const config = Hjson.parse(configJson);
+      validateConfigJson(config);
       const info = Hjson.parse(infoJson);
       const fileBaseName = info.keyboard_folder
         ? info.keyboard_folder.replaceAll("/", "_")
         : info.manufacturer + "_" + info.keyboard_name;
       downloadData(configJson, `${fileBaseName}_${configType}_config.json`);
     } catch (error) {
-      alert("Invalid config Hjson");
+      alert(`Invalid config json\n${error}`);
       return;
     }
   };
