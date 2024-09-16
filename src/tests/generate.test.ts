@@ -1,10 +1,10 @@
-import { convertToBmpVialBin } from "./convertToBmpVialBin";
-import convertInfoJsonToConfigJson from "./convertToConfigJson.js";
-import { convertToVialJson } from "./convertToVialJson.js";
+import { convertToBmpVialBin } from "../convertToBmpVialBin.js";
+import convertInfoJsonToConfigJson from "../convertToConfigJson.js";
+import { convertToVialJson } from "../convertToVialJson.js";
 // import init, { xz_compress } from "./pkg/liblzma_wasm.js";
-import * as bmpKeycodes from "./bmpKeycodes.json";
+import * as bmpKeycodes from "../bmpKeycodes.json";
 import { expect, it } from "vitest";
-import { keyboards as keyboard_list } from "./keyboard_list.js";
+import { keyboards as keyboard_list } from "../keyboard_list.js";
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 const getDirName = require("path").dirname;
