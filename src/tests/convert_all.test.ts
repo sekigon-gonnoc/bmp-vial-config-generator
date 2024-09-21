@@ -4,6 +4,7 @@ import convertInfoJsonToConfigJson from "../convertToConfigJson.js";
 import { convertToVialJson } from "../convertToVialJson.js";
 // import init, { xz_compress } from "./pkg/liblzma_wasm.js";
 import * as bmpKeycodes from "../bmpKeycodes.json";
+import * as bmpCustomMenus from "../bmpCustomMenus.json";
 import { expect, it } from "vitest";
 import { keyboards as keyboard_list } from "../keyboard_list.js";
 const fs = require("fs");
@@ -35,6 +36,7 @@ async function convert_vial_json_to_bin(dest_path, vial, config, config_type) {
     const vialJson = {
         ...vial,
         customKeycodes: bmpKeycodes.customKeycodes,
+        menus: bmpCustomMenus.menus
     };
 
     const vialData = await lzma.compress(JSON.stringify(vialJson), "6");
