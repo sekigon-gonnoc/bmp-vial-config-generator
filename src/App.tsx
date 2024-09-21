@@ -8,6 +8,7 @@ import init, { xz_compress } from "./pkg";
 import "./App.css";
 import { convertToBmpVialBin } from "./convertToBmpVialBin";
 import * as bmpKeycodes from './bmpKeycodes.json'
+import * as bmpCustomMenus from './bmpCustomMenus.json'
 import * as Hjson from "hjson"
 
 const keyboardListAPI = `https://api.qmk.fm/v1/keyboards`;
@@ -188,6 +189,7 @@ function App() {
         {
           ...Hjson.parse(vialJson),
           customKeycodes: bmpKeycodes.customKeycodes,
+          menus: bmpCustomMenus.menus,
         },
         null,
         4
