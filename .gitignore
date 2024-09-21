@@ -23,3 +23,5 @@ generate
 *.njsproj
 *.sln
 *.sw?
+
+generate/
