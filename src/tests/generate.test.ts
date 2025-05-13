@@ -50,7 +50,7 @@ async function generate_config_files(name, keyboard_path) {
   const info = await fetch(`${keyboardAPI}/${keyboard_path}/info.json`)
     .then((res) => res.json())
     .then((j) => j.keyboards[keyboard_path]);
-    const dest_path = info.keyboard_folder.replaceAll('/', '_');
+    const dest_path = info.keyboard_folder.replaceAll('/', '_').toLowerCase();
   try {
     const config = convertInfoJsonToConfigJson(info);
     const vialJson = {
@@ -85,7 +85,7 @@ async function convert_all_json() {
     const fileName = file.split('_');
     const config_type = fileName.slice(-2)[0];
     const basename = fileName.slice(0, -2).join('_');
-    const dest_path = 'generate/' + basename;
+    const dest_path = 'generate/' + basename.toLowerCase();
     
     // Create vial.json path
     const vial_path = 'generate/json/' + basename + '_vial.json';
