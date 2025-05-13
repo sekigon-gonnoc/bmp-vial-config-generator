@@ -5,6 +5,7 @@ import { convertToVialJson } from "../convertToVialJson.js";
 import * as bmpKeycodes from "../bmpKeycodes.json";
 import { expect, it } from "vitest";
 import { keyboards as keyboard_list } from "../keyboard_list.js";
+import * as Hjson from "hjson";
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 const getDirName = require("path").dirname;
@@ -78,20 +79,29 @@ async function generate_config_files(name, keyboard_path) {
 }
 
 async function convert_all_json() {
-  const files = fs.readdirSync('generate')
+  const files = fs.readdirSync('generate/json');
   for (const file of files) {
     if (!file.includes('config.json')) continue;
-    const dest_path = 'generate/' + file.split('_').slice(0, -2).join('_');
-    const vial_path = dest_path + '_vial.json'
-    const vial = JSON.parse(fs.readFileSync(vial_path));
-    const config = JSON.parse(fs.readFileSync('generate/' + file));
-    const config_type = file.split('_').slice(-2)[0];
+    const fileName = file.split('_');
+    const config_type = fileName.slice(-2)[0];
+    const basename = fileName.slice(0, -2).join('_');
+    const dest_path = 'generate/' + basename;
+    
+    // Create vial.json path
+    const vial_path = 'generate/json/' + basename + '_vial.json';
+    if (!fs.existsSync(vial_path)) {
+      console.log(`Skipping ${file}: No matching vial JSON found at ${vial_path}`);
+      continue;
+    }
 
-    console.log(dest_path, vial, config, config_type);
-    await convert_vial_json_to_bin(dest_path, vial, config, config_type)
+    console.log(`Processing: ${dest_path}, config_type: ${config_type}`);
+    
+    const vial = Hjson.parse(fs.readFileSync(vial_path, 'utf-8'));
+    const config = Hjson.parse(fs.readFileSync('generate/json/' + file, 'utf-8'));
+
+    await convert_vial_json_to_bin(dest_path, vial, config, config_type);
   }
 }
-
 
 async function convert_vial_json_to_bin(dest_path, vial, config, config_type) {
     const vialJson = {
@@ -107,4 +117,4 @@ async function convert_vial_json_to_bin(dest_path, vial, config, config_type) {
 
     const vial_json_path = `${dest_path}_vial.json`;
     fs.writeFileSync(vial_json_path, JSON.stringify(vialJson, null, 4));
-  } 
+  }

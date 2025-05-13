@@ -124,6 +124,16 @@
             "name": "ENABLE_JP_KEY_ON_US_OS_OVERRIDE",
             "title": "Enable JP keyboard on US OS override",
             "shortName": "JU\nOVR"
+        },
+        {
+            "name": "ENABLE_WEB_BT_CONNECTION",
+            "title": "Enable web bluetooth connection",
+            "shortName": "EN\nWEBBT"
+        },
+        {
+            "name": "DISABLE_WEB_BT_CONNECTION",
+            "title": "Disable web bluetooth connection",
+            "shortName": "DIS\nWEBBT"
         }
     ]
 }

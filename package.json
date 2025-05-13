@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "generate": "cd generate/BLE-Micro-Pro && git pull && cd ../.. && node -e \"require('mkdirp').sync('generate/json')\" && xcopy /Y \"generate\\BLE-Micro-Pro\\bmp-vial-config\\*.json\" \"generate\\json\\\" && vitest --run -t \"json-to-bin\" src/tests/generate.test.ts"
   },
   "dependencies": {
     "buffer": "^6.0.3",
